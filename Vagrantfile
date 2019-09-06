@@ -34,6 +34,24 @@ mysql_enable_remote     = "false" # remote access enabled when true
 php_timezone            = server_timezone # http://php.net/manual/en/timezones.php
 php_version             = "7.3"           # Options: 5.6 | 7.0 | 7.1 | 7.2 | 7.3
 
+composer_packages     = [        # List any global Composer packages that you want to install
+  "phpunit/phpunit:6.5.*@dev",
+  "codeception/codeception=*",
+  #"phpspec/phpspec:2.0.*@dev",
+  #"squizlabs/php_codesniffer:1.5.*",
+]
+
+# Default web server document root
+# Symfony's public directory is assumed "web"
+# Laravel's public directory is assumed "public"
+
+laravel_root_folder   = "laravel" # Where to install Laravel. Will `composer install` if a composer.json file exists
+laravel_public_folder = "public"
+laravel_version       = "latest-stable" # If you need a specific version of Laravel, set it here
+laravel_server_name   = laravel_root_folder + "." + server_ip + ".xip.io"
+symfony_root_folder   = "symfony" # Where to install Symfony.
+symfony_public_folder = "web"
+
 # NodeJS
 nodejs_version          = "11" # Options: 6 | 8 | 10 | 11
 nodejs_packages         = [    # List any global NodeJS packages that you want to install
@@ -131,10 +149,10 @@ Vagrant.configure("2") do |config|
   ##########
 
   # Provision Base Packages + Updates
-  config.vm.provision "shell", path: "scripts/base.sh", args: [hostname, locale_language, locale_codeset, server_timezone]
+  #config.vm.provision "shell", path: "scripts/base.sh", args: [hostname, locale_language, locale_codeset, server_timezone]
 
   # Provision PHP
-  config.vm.provision "shell", path: "scripts/php.sh", args: [php_timezone, php_version]
+  #config.vm.provision "shell", path: "scripts/php.sh", args: [php_timezone, php_version]
 
 
   ####
@@ -142,11 +160,11 @@ Vagrant.configure("2") do |config|
   ##########
 
   # Provision Nginx Base
-  config.vm.provision "shell", path: "scripts/nginx.sh", args: [server_ip, guest_projects_dir]
+  #config.vm.provision "shell", path: "scripts/nginx.sh", args: [server_ip, guest_projects_dir]
 
   # After Php + Nginx
   # Can't start any of them before both of them are installed
-  config.vm.provision "shell", path: "scripts/afterphpnginx.sh"
+  #config.vm.provision "shell", path: "scripts/afterphpnginx.sh"
 
   ####
   # Databases
@@ -156,7 +174,7 @@ Vagrant.configure("2") do |config|
   # config.vm.provision "shell", path: "scripts/mysql.sh", args: [mysql_root_password, mariadb_version, mysql_enable_remote, guest_projects_dir]
 
   # Provision MariaDB
-  config.vm.provision "shell", path: "scripts/mariadb.sh", args: [mysql_root_password, mariadb_version, mysql_enable_remote, guest_projects_dir]
+  #config.vm.provision "shell", path: "scripts/mariadb.sh", args: [mysql_root_password, mariadb_version, mysql_enable_remote, guest_projects_dir]
 
 
   ####
@@ -172,10 +190,24 @@ Vagrant.configure("2") do |config|
   ##########
 
   # Install Nodejs
-  config.vm.provision "shell", path: "scripts/nodejs.sh", privileged: false, args: nodejs_packages.unshift(nodejs_version)
+  #config.vm.provision "shell", path: "scripts/nodejs.sh", privileged: false, args: nodejs_packages.unshift(nodejs_version)
 
+  ####
+  # CMS
+  ##########
   # Install wp-cli
   # config.vm.provision "shell", path: "scripts/wp-cli.sh", privileged: false, args: wpcli_sites.unshift(guest_projects_dir)
   wpcli_sites=wpcli_sites.unshift(guest_projects_dir)
-  config.vm.provision "shell", path: "scripts/wp-cli1.sh", privileged: false, args: wpcli_sites.unshift(server_ip)
+  #config.vm.provision "shell", path: "scripts/wp-cli1.sh", privileged: false, args: wpcli_sites.unshift(server_ip)
+
+  ####
+  # Frameworks and Tooling
+  ##########
+  #config.vm.provision "shell", path: "scripts/composer.sh", privileged: false, args: [composer_packages.join(" ")]
+
+  # Provision Laravel
+  # config.vm.provision "shell", path: "scripts/laravel.sh", privileged: false, args: [guest_projects_dir, laravel_root_folder, laravel_public_folder, laravel_version, laravel_server_name]
+
+  # Provision Symfony
+  # config.vm.provision "shell", path: "scripts/symfony.sh", privileged: false, args: [server_ip, symfony_root_folder, symfony_public_folder]
 end
