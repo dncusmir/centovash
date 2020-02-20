@@ -32,7 +32,7 @@ mysql_enable_remote     = "false" # remote access enabled when true
 
 # Languages and Packages
 php_timezone            = server_timezone # http://php.net/manual/en/timezones.php
-php_version             = "7.3"           # Options: 5.6 | 7.0 | 7.1 | 7.2 | 7.3
+php_version             = "7.4"           # Options: 5.6 | 7.0 | 7.1 | 7.2 | 7.3 | 7.4
 
 composer_packages     = [        # List any global Composer packages that you want to install
   "phpunit/phpunit:6.5.*@dev",
@@ -112,7 +112,7 @@ Vagrant.configure("2") do |config|
   # the path on the host to the actual folder. The second argument is
   # the path on the guest to mount the folder. And the optional third
   # argument is a set of non-required options.
-  config.vm.synced_folder host_projects_dir, guest_projects_dir
+  config.vm.synced_folder host_projects_dir, guest_projects_dir, type: "virtualbox"
 
   # Provider-specific configuration so you can fine-tune various
   # backing providers for Vagrant. These expose provider-specific options.

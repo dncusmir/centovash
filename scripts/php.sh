@@ -18,6 +18,8 @@ elif [ $2 == "7.2" ]; then
     yum -y --enablerepo=remi-php72 install php-fpm- php-cli php-mysqlnd php-xml php-json php-pecl-memcached php-gd php-mbstring php-pdo php-common php-imap  php-mcrypt php-curl  php-imagick  php-intl php-xdebug
 elif [ $2 == "7.3" ]; then
     yum -y --enablerepo=remi-php73 install php-fpm php-cli php-mysqlnd php-xml php-json php-pecl-memcached php-gd php-mbstring php-pdo php-common php-imap  php-mcrypt php-curl  php-imagick  php-intl php-xdebug
+elif [ $2 == "7.4" ]; then
+    yum -y --enablerepo=remi-php74 install php-fpm php-cli php-mysqlnd php-xml php-json php-pecl-memcached php-gd php-mbstring php-pdo php-common php-imap  php-mcrypt php-curl  php-imagick  php-intl php-xdebug
 fi
 
 

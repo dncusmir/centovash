@@ -6,10 +6,12 @@
 nume_proiect=$1
 nume_lower="${nume_proiect,,}"
 url=$nume_lower.192.168.8.12.xip.io;
-path=~/sites/$nume_proiect
+parent_dir=~/sites
+path=$parent_dir/$nume_proiect
 public_folder=public
 
 echo "### setting up laravel project "$nume_proiect
+cd $parent_dir
 composer create-project --prefer-dist Laravel/Laravel $nume_proiect
 
 echo "## setting up auth + vue scaffolding"
