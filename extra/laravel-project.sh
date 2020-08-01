@@ -1,22 +1,30 @@
 #!/usr/bin/env bash
 
-# args: nume_proiect
-# run din ~/sites: bash /vagrant/extra/laravel-project.sh nume_proiect
+# args: nume_proiect, version
+# run din ~/sites: bash /vagrant/extra/laravel-project.sh nume_proiect version
 
 nume_proiect=$1
+version=$2
 nume_lower="${nume_proiect,,}"
-url=$nume_lower.192.168.8.12.xip.io;
+url="$nume_lower.192.168.8.12.xip.io $nume_lower.test";
 parent_dir=~/sites
 path=$parent_dir/$nume_proiect
 public_folder=public
 
+# ui version
+if [[ $version =~ ^[\^\~]*7.* ]] ; then
+        ui_version="^2"
+else
+	ui_version="^1"
+fi
+
 echo "### setting up laravel project "$nume_proiect
 cd $parent_dir
-composer create-project --prefer-dist Laravel/Laravel $nume_proiect
+composer create-project --prefer-dist Laravel/Laravel $nume_proiect $version
 
 echo "## setting up auth + vue scaffolding"
 cd $path
-composer require laravel/ui
+composer require laravel/ui $ui_version
 php artisan ui vue --auth
 echo "# fixing node_modules long name bug"
 node_modules=$nume_proiect"_node_modules"
